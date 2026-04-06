@@ -1,54 +1,85 @@
+import argparse
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-import argparse
+from Crypto.Util.Padding import pad, unpad
 
-def generar_llave():
-    key = get_random_bytes(32)
-    with open("llave.key", "wb") as f:
+KEY_FILE = "key.bin"
+
+# =========================
+# Generar y guardar llave
+# =========================
+def generate_key():
+    key = get_random_bytes(32)  # AES-256
+    with open(KEY_FILE, "wb") as f:
         f.write(key)
-    print("Llave generada")
+    print("[+] Llave generada y guardada en key.bin")
+    return key
 
-def cifrar(archivo):
-    with open("llave.key", "rb") as f:
-        key = f.read()
+# =========================
+# Cargar llave existente
+# =========================
+def load_key():
+    try:
+        with open(KEY_FILE, "rb") as f:
+            return f.read()
+    except FileNotFoundError:
+        print("[-] No existe key.bin. Generando nueva llave...")
+        return generate_key()
 
-    with open(archivo, "rb") as f:
+# =========================
+# Cifrar archivo
+# =========================
+def encrypt_file(input_file):
+    key = load_key()
+
+    with open(input_file, "rb") as f:
         data = f.read()
 
-    cipher = AES.new(key, AES.MODE_EAX)
-    ciphertext, tag = cipher.encrypt_and_digest(data)
+    cipher = AES.new(key, AES.MODE_CBC)
+    ciphertext = cipher.encrypt(pad(data, AES.block_size))
 
-    with open("archivo.cifrado", "wb") as f:
-        f.write(cipher.nonce + tag + ciphertext)
+    output_file = input_file + ".enc"
 
-    print("Archivo cifrado")
+    with open(output_file, "wb") as f:
+        f.write(cipher.iv)  # Guardamos IV
+        f.write(ciphertext)
 
-def descifrar():
-    with open("llave.key", "rb") as f:
-        key = f.read()
+    print(f"[+] Archivo cifrado guardado como: {output_file}")
 
-    with open("archivo.cifrado", "rb") as f:
-        nonce = f.read(16)
-        tag = f.read(16)
+# =========================
+# Descifrar archivo
+# =========================
+def decrypt_file(input_file):
+    key = load_key()
+
+    with open(input_file, "rb") as f:
+        iv = f.read(16)
         ciphertext = f.read()
 
-    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
-    data = cipher.decrypt_and_verify(ciphertext, tag)
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+    plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
 
-    with open("archivo_descifrado.txt", "wb") as f:
-        f.write(data)
+    output_file = input_file.replace(".enc", ".dec.txt")
 
-    print("Archivo descifrado")
+    with open(output_file, "wb") as f:
+        f.write(plaintext)
 
-parser = argparse.ArgumentParser()
-parser.add_argument("accion", choices=["generar", "cifrar", "descifrar"])
-parser.add_argument("--archivo")
+    print(f"[+] Archivo descifrado guardado como: {output_file}")
 
-args = parser.parse_args()
+# =========================
+# CLI
+# =========================
+def main():
+    parser = argparse.ArgumentParser(description="Herramienta de cifrado AES")
+    parser.add_argument("action", choices=["encrypt", "decrypt"], help="Acción a realizar")
+    parser.add_argument("file", help="Archivo de entrada")
 
-if args.accion == "generar":
-    generar_llave()
-elif args.accion == "cifrar":
-    cifrar(args.archivo)
-elif args.accion == "descifrar":
-    descifrar()
+    args = parser.parse_args()
+
+    if args.action == "encrypt":
+        encrypt_file(args.file)
+    elif args.action == "decrypt":
+        decrypt_file(args.file)
+
+if __name__ == "__main__":
+    main()
