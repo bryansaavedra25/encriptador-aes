@@ -1,13 +1,13 @@
-# 🔐 Encriptador AES en Python
+#  Encriptador AES en Python
 
-## 📌 Descripción
+##  Descripción
 
 Este proyecto implementa un programa en Python que permite **cifrar y descifrar archivos de texto plano** utilizando el algoritmo criptográfico AES.
 El sistema funciona mediante línea de comandos (CLI), permitiendo generar una llave, cifrar archivos y posteriormente recuperar el contenido original.
 
----
 
-## 🎯 Objetivo
+
+##  Objetivo
 
 Aplicar conceptos de criptografía simétrica, incluyendo:
 
@@ -15,37 +15,36 @@ Aplicar conceptos de criptografía simétrica, incluyendo:
 * Cifrado de datos
 * Descifrado y recuperación de información
 
----
 
-## 🔒 Algoritmo utilizado
+##  Algoritmo utilizado
 
 Se utilizó **AES (Advanced Encryption Standard)** en modo **EAX**.
 
-### ✔ ¿Por qué EAX?
+###  ¿Por qué EAX?
 
 * Permite **cifrado y autenticación al mismo tiempo**
 * No requiere padding manual
 * Evita errores comunes de seguridad
 * Garantiza integridad de los datos (detecta modificaciones)
 
----
 
-## 🔑 Tamaño de la llave
+
+## Tamaño de la llave
 
 Se utilizó una llave de:
 
 * **256 bits (32 bytes)**
 
-### ✔ Justificación
+###  Justificación
 
 * Mayor nivel de seguridad disponible en AES
 * Recomendado para aplicaciones modernas
 
 ---
 
-## ⚙️ Requisitos
+##  Requisitos
 
-* Python 3.x
+* Python 
 * Librería PyCryptodome
 
 Instalación:
@@ -56,7 +55,7 @@ pip install pycryptodome
 
 ---
 
-## 📁 Estructura del proyecto
+##  Estructura del proyecto
 
 ```
 encriptador-aes/
@@ -73,9 +72,9 @@ encriptador-aes/
 
 ---
 
-## 🚀 Uso del programa
+##  Uso del programa
 
-### 1️⃣ Generar llave
+###  Generar llave
 
 ```bash
 python crypto_tool.py generar
@@ -83,9 +82,8 @@ python crypto_tool.py generar
 
 ✔ Genera el archivo `llave.key`
 
----
 
-### 2️⃣ Cifrar archivo
+### Cifrar archivo
 
 ```bash
 python crypto_tool.py cifrar --archivo mensaje_prueba.txt
@@ -93,9 +91,9 @@ python crypto_tool.py cifrar --archivo mensaje_prueba.txt
 
 ✔ Genera `archivo.cifrado`
 
----
 
-### 3️⃣ Descifrar archivo
+
+###  Descifrar archivo
 
 ```bash
 python crypto_tool.py descifrar
@@ -103,15 +101,15 @@ python crypto_tool.py descifrar
 
 ✔ Genera `archivo_descifrado.txt`
 
----
 
-## ✅ Verificación
+
+##  Verificación
 
 El archivo original (`mensaje_prueba.txt`) y el archivo descifrado (`archivo_descifrado.txt`) deben ser **idénticos**, demostrando que el proceso de cifrado y descifrado es correcto.
 
----
 
-## 📸 Evidencia
+
+##  Evidencia
 
 En la carpeta `capturas/` se incluyen imágenes que muestran:
 
@@ -119,10 +117,9 @@ En la carpeta `capturas/` se incluyen imágenes que muestran:
 * Cifrado de archivo
 * Descifrado exitoso
 
----
 
-## 🧠 Conclusión
+
+##  Conclusión
 
 Este proyecto demuestra el uso práctico de criptografía simétrica mediante AES, permitiendo proteger información sensible y garantizar su integridad y confidencialidad.
 
----

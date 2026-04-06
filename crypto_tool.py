@@ -82,4 +82,8 @@ def main():
         decrypt_file(args.file)
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> d81180a5d4673422084c65e92f2b75a870ffc549
